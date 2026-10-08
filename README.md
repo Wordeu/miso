@@ -1,6 +1,6 @@
 # Silo
 
-A responsive hardware landing page, built with semantic HTML, CSS, SVG, and vanilla JavaScript. Vite handles development and production assets; a small Node server provides the optional waitlist endpoint.
+A responsive hardware landing page, built with semantic HTML, CSS, SVG, and vanilla JavaScript. Vite handles development and production assets; Formspree collects early-access signups.
 
 ## Run
 
@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. For production, run `npm run build` then `npm start`. Set `PORT` to change the port. The signup form overlays the construction drawing and saves release-notification requests through the Node waitlist endpoint.
+Open http://localhost:5173. For production, run `npm run build` then `npm start`. Set `PORT` to change the port. On Vercel, use `npm run build` with `dist` as the output directory; signups go directly to Formspree without a backend or environment variables.
 
 ## Edit
 
@@ -19,9 +19,11 @@ Open http://localhost:5173. For production, run `npm run build` then `npm start`
 - `index.html`: page structure, supporting copy, and SVG construction drawings.
 - `src/style.css`: colors, spacing, typography, breakpoints, and animation. Design tokens are in `:root`.
 - `public/models/`: the three supplied logo assets, displayed in grayscale.
-- `server.mjs`: waitlist API and application server.
+- `server.mjs`: local application server and legacy file-based waitlist API.
 
-Waitlist entries are validated, deduplicated, and saved in `.data/waitlist.jsonl` with restricted file permissions. The directory is gitignored and never served in production. Set `WAITLIST_DATA_DIR` to a persistent directory when deploying. Storage supports one Node process; use a shared database before running multiple instances. No email provider is connected, and joining does not send a confirmation email. Add your privacy notice and retention policy before collecting public signups.
+The signup form submits to `https://formspree.io/f/mwlvoqoo`, configured in the form's `action` in `index.html`. View collected emails in that form's Submissions tab in your Formspree account. Notification emails and spam settings are managed in Formspree. JavaScript shows success and error messages inline; the HTML form also supports direct submission without JavaScript. The public form endpoint is not a secret and needs no API key.
+
+The legacy `/api/waitlist` endpoint in the local Node server still stores entries in `.data/waitlist.jsonl`, but the signup form no longer uses it. Existing local entries are not automatically transferred to Formspree.
 
 ## Verify
 
@@ -30,7 +32,7 @@ npm run build
 npm test
 ```
 
-Browser checks use installed Google Chrome and a separate production server on port 5184. Test submissions go to an isolated temporary directory, never the real waitlist. Coverage includes responsive overflow, assets, invalid and duplicate submissions, persistence, network errors, keyboard and pointer interactions, scroll reveal, reduced motion, and API validation.
+Browser checks use installed Google Chrome and a separate production server on port 5184. Formspree requests are mocked so tests never add entries to the real inbox. Legacy API checks use an isolated temporary directory. Coverage includes the Formspree request, success and error handling, responsive overflow, assets, keyboard and pointer interactions, scroll reveal, reduced motion, and legacy API validation.
 
 ## Reference
 

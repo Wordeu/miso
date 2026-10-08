@@ -629,11 +629,10 @@ h1 .accent,
   height: 40px;
 }
 .models-section .model-grid figure:last-child img {
-  /* The DeepSeek artwork only fills the middle ~49% of its square canvas, so
-     it is scaled up to land on the same 40px mark height as the others. */
-  width: 81px;
-  height: 81px;
-  filter: grayscale(1) contrast(3);
+  /* The transparent source has 377px of visible artwork in a 512px canvas. */
+  width: 54px;
+  height: 54px;
+  filter: grayscale(1);
   mix-blend-mode: multiply;
 }
 .model-logo {
@@ -1032,7 +1031,8 @@ h1 .accent,
     height: 25px;
   }
   .model-grid figure:last-child img {
-    height: 33px;
+    width: 45px;
+    height: 45px;
   }
   .model-grid figcaption {
     margin-right: auto;

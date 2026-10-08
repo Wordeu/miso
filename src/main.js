@@ -6,6 +6,7 @@ for (const node of document.querySelectorAll("[data-copy]")) {
 }
 
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const compactViewport = matchMedia("(max-width: 700px)");
 const root = document.documentElement;
 const toggle = document.querySelector("#motion-toggle");
 let motionEnabled = !reducedMotion.matches;
@@ -26,7 +27,12 @@ function finishHeadline() {
 }
 
 function startHeadlineMatrix() {
-  if (!headlineChars.length || !motionEnabled || reducedMotion.matches) {
+  if (
+    !headlineChars.length ||
+    !motionEnabled ||
+    reducedMotion.matches ||
+    compactViewport.matches
+  ) {
     finishHeadline();
     return;
   }
@@ -309,14 +315,16 @@ signup.addEventListener("submit", async (event) => {
   signupStatus.textContent = "Saving your place…";
 
   try {
-    const response = await fetch("/api/waitlist", {
+    const response = await fetch(signup.action, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       body: JSON.stringify({ email: signupEmail.value.trim() }),
       signal: AbortSignal.timeout(15000),
     });
-    const result = await response.json();
-    if (!response.ok || result.success !== true) {
+    if (!response.ok) {
       throw new Error(response.status === 429
         ? "Please wait a minute and try again."
         : "Couldn’t save your place. Please try again.");

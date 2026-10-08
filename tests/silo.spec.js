@@ -1,8 +1,17 @@
 import { test, expect } from "@playwright/test";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 
-test("signup saves an email once and supports keyboard submission", async ({ page }) => {
+const formspreeEndpoint = "https://formspree.io/f/mwlvoqoo";
+
+test.beforeEach(async ({ page }) => {
+  // Keep automated signups out of the real Formspree inbox.
+  await page.route("https://formspree.io/**", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ ok: true }),
+  }));
+});
+
+test("signup submits to Formspree and supports keyboard submission", async ({ page }) => {
   await page.goto("/");
   const email = `launch-${Date.now()}@example.com`;
   const input = page.getByRole("textbox", { name: "Email address" });
@@ -15,30 +24,51 @@ test("signup saves an email once and supports keyboard submission", async ({ pag
   await expect(page.locator(".signup-fields button")).toHaveText(
     "Get early access →",
   );
-  for (let attempt = 0; attempt < 2; attempt++) {
-    await input.fill(email);
-    await input.press("Enter");
-    await expect(page.getByRole("status")).toHaveText("You’re on the list. Thanks for signing up.");
-    await expect(input).toHaveValue("");
-  }
-  const entries = (await readFile(path.join(process.env.SILO_TEST_DATA, "waitlist.jsonl"), "utf8"))
-    .trim().split("\n").map((line) => JSON.parse(line));
-  expect(entries.filter((entry) => entry.email === email)).toHaveLength(1);
+  await input.fill(email);
+  const submission = page.waitForRequest(formspreeEndpoint);
+  await input.press("Enter");
+  const request = await submission;
+  expect(request.method()).toBe("POST");
+  expect(request.headers().accept).toBe("application/json");
+  expect(request.postDataJSON()).toEqual({ email });
+  await expect(page.getByRole("status")).toHaveText("You’re on the list. Thanks for signing up.");
+  await expect(input).toHaveValue("");
 });
 
 test("signup preserves the email after a network failure and allows retry", async ({ page }) => {
   await page.goto("/");
   const input = page.getByRole("textbox", { name: "Email address" });
   const button = page.getByRole("button", { name: "Get early access" });
-  await page.route("**/api/waitlist", (route) => route.abort());
+  await page.route(formspreeEndpoint, (route) => route.abort());
   await input.fill("retry@example.com");
   await button.click();
   await expect(page.getByRole("status")).toHaveText("Couldn’t connect. Please try again.");
   await expect(input).toHaveValue("retry@example.com");
   await expect(button).toBeEnabled();
-  await page.unroute("**/api/waitlist");
+  await page.unroute(formspreeEndpoint);
   await button.click();
   await expect(page.getByRole("status")).toHaveText("You’re on the list. Thanks for signing up.");
+});
+
+test("signup preserves the email when Formspree rejects a submission", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByRole("textbox", { name: "Email address" });
+  const button = page.getByRole("button", { name: "Get early access" });
+  await input.fill("retry@example.com");
+  for (const status of [422, 429, 500]) {
+    await page.route(formspreeEndpoint, (route) => route.fulfill({
+      status,
+      contentType: "application/json",
+      body: JSON.stringify({ errors: [{ message: "Submission rejected" }] }),
+    }));
+    await button.click();
+    await expect(page.getByRole("status")).toHaveText(status === 429
+      ? "Please wait a minute and try again."
+      : "Couldn’t save your place. Please try again.");
+    await expect(input).toHaveValue("retry@example.com");
+    await expect(button).toBeEnabled();
+    await page.unroute(formspreeEndpoint);
+  }
 });
 
 test("page and supplied assets load without errors at desktop and mobile widths", async ({
