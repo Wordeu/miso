@@ -1,4 +1,45 @@
 import { test, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
+test("signup saves an email once and supports keyboard submission", async ({ page }) => {
+  await page.goto("/");
+  const email = `launch-${Date.now()}@example.com`;
+  const input = page.getByRole("textbox", { name: "Email address" });
+  await expect(page.locator("#signup-title")).toHaveText(
+    "£145. Discounted from £395.",
+  );
+  await expect(page.locator("#signup-copy")).toHaveText(
+    "Be among the first to own SILO. Join the early-access list to unlock exclusive launch pricing.",
+  );
+  await expect(page.locator(".signup-fields button")).toHaveText(
+    "Get early access →",
+  );
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await input.fill(email);
+    await input.press("Enter");
+    await expect(page.getByRole("status")).toHaveText("You’re on the list. Thanks for signing up.");
+    await expect(input).toHaveValue("");
+  }
+  const entries = (await readFile(path.join(process.env.SILO_TEST_DATA, "waitlist.jsonl"), "utf8"))
+    .trim().split("\n").map((line) => JSON.parse(line));
+  expect(entries.filter((entry) => entry.email === email)).toHaveLength(1);
+});
+
+test("signup preserves the email after a network failure and allows retry", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByRole("textbox", { name: "Email address" });
+  const button = page.getByRole("button", { name: "Get early access" });
+  await page.route("**/api/waitlist", (route) => route.abort());
+  await input.fill("retry@example.com");
+  await button.click();
+  await expect(page.getByRole("status")).toHaveText("Couldn’t connect. Please try again.");
+  await expect(input).toHaveValue("retry@example.com");
+  await expect(button).toBeEnabled();
+  await page.unroute("**/api/waitlist");
+  await button.click();
+  await expect(page.getByRole("status")).toHaveText("You’re on the list. Thanks for signing up.");
+});
 
 test("page and supplied assets load without errors at desktop and mobile widths", async ({
   page,
@@ -6,7 +47,9 @@ test("page and supplied assets load without errors at desktop and mobile widths"
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await expect(page).toHaveTitle("Silo — Intelligence, within reach.");
+  await expect(
+    page,
+  ).toHaveTitle("Silo — Offline open-weight AI that connects to your device.");
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     expect(
@@ -89,7 +132,7 @@ test("reduced motion stays static and navigation works from the keyboard", async
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#models$/);
   await expect(
-    page.getByRole("heading", { name: "Your choice of open-weight models." }),
+    page.getByRole("heading", { name: "Your choice of 60+ models." }),
   ).toBeInViewport();
 });
 

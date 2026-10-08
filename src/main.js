@@ -11,6 +11,113 @@ const toggle = document.querySelector("#motion-toggle");
 let motionEnabled = !reducedMotion.matches;
 let manuallyDisabled = false;
 let scrollFrame = 0;
+let headlineChars = [];
+let headlineFrame = 0;
+
+const matrixAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#$%&@*";
+
+function finishHeadline() {
+  if (headlineFrame) cancelAnimationFrame(headlineFrame);
+  headlineFrame = 0;
+  for (const character of headlineChars) {
+    character.node.textContent = character.value;
+    character.node.classList.add("is-visible", "is-resolved");
+  }
+}
+
+function startHeadlineMatrix() {
+  if (!headlineChars.length || !motionEnabled || reducedMotion.matches) {
+    finishHeadline();
+    return;
+  }
+  if (headlineFrame) cancelAnimationFrame(headlineFrame);
+  for (const character of headlineChars)
+    character.node.classList.remove("is-visible", "is-resolved");
+  const startedAt = performance.now();
+  const revealDuration = 280;
+  const stagger = 34;
+  const tick = (now) => {
+    let complete = true;
+    for (const [index, character] of headlineChars.entries()) {
+      const progress = Math.max(
+        0,
+        Math.min(1, (now - startedAt - index * stagger) / revealDuration),
+      );
+      if (progress < 1 && character.value !== " ") {
+        character.node.textContent =
+          matrixAlphabet[Math.floor(Math.random() * matrixAlphabet.length)];
+        if (progress > 0) character.node.classList.add("is-visible");
+        character.node.classList.remove("is-resolved");
+        complete = false;
+      } else {
+        character.node.textContent = character.value;
+        character.node.classList.add("is-visible", "is-resolved");
+      }
+    }
+    if (complete) headlineFrame = 0;
+    else headlineFrame = requestAnimationFrame(tick);
+  };
+  headlineFrame = requestAnimationFrame(tick);
+}
+
+function prepareHeadlineMatrix() {
+  const headline = document.querySelector("#hero-title");
+  if (!headline) return [];
+  const reserve = document.createElement("span");
+  reserve.className = "headline-reserve";
+  reserve.setAttribute("aria-hidden", "true");
+  reserve.innerHTML = headline.innerHTML;
+  const label = reserve.textContent.replace(/\s+/g, " ").trim();
+  headline.setAttribute("aria-label", label);
+
+  const matrix = document.createElement("span");
+  matrix.className = "headline-matrix";
+  matrix.setAttribute("aria-hidden", "true");
+  const fragment = document.createDocumentFragment();
+  const characters = [];
+  const walk = (nodes, inherited) => {
+    for (const node of nodes) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        let offset = 0;
+        for (const value of node.textContent) {
+          const character = document.createElement("span");
+          character.className = `matrix-char ${inherited}`.trim();
+          character.textContent = value;
+          fragment.append(character);
+          const range = document.createRange();
+          range.setStart(node, offset);
+          range.setEnd(node, offset + value.length);
+          characters.push({ node: character, value, range });
+          offset += value.length;
+        }
+      } else if (node.nodeName === "BR") {
+        // Line breaks are represented by the hidden reserve layer. The
+        // animated characters are positioned over that stable layout.
+      } else {
+        // Keep wrapper classes (e.g. .accent) on the characters they cover.
+        walk([...node.childNodes], `${inherited} ${node.className}`.trim());
+      }
+    }
+  };
+  walk([...reserve.childNodes], "");
+  headline.replaceChildren(reserve, matrix);
+  matrix.append(fragment);
+
+  const positionCharacters = () => {
+    const headlineRect = headline.getBoundingClientRect();
+    for (const character of characters) {
+      const rect = character.range.getBoundingClientRect();
+      character.node.style.left = `${rect.left - headlineRect.left}px`;
+      character.node.style.top = `${rect.top - headlineRect.top}px`;
+      character.node.style.width = `${rect.width}px`;
+      character.node.style.height = `${rect.height}px`;
+    }
+  };
+  positionCharacters();
+  new ResizeObserver(positionCharacters).observe(headline);
+  document.fonts?.ready.then(positionCharacters);
+  return characters;
+}
 
 function setMotion(enabled) {
   motionEnabled = enabled && !reducedMotion.matches;
@@ -23,6 +130,8 @@ function setMotion(enabled) {
       ? "Motion on"
       : "Motion off";
   toggle.disabled = reducedMotion.matches;
+  if (motionEnabled) startHeadlineMatrix();
+  else finishHeadline();
   updateScroll();
 }
 
@@ -165,6 +274,7 @@ for (const surface of document.querySelectorAll(".motion-surface")) {
     move();
   });
 }
+headlineChars = prepareHeadlineMatrix();
 setMotion(motionEnabled);
 
 const navLinks = [...document.querySelectorAll("nav a")];
@@ -183,3 +293,45 @@ const navObserver = new IntersectionObserver(
 );
 for (const link of navLinks)
   navObserver.observe(document.querySelector(link.hash));
+
+const signup = document.querySelector(".launch-signup");
+const signupEmail = signup.querySelector("input");
+const signupButton = signup.querySelector("button");
+const signupStatus = signup.querySelector(".signup-status");
+let submitting = false;
+
+signup.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (submitting || !signup.reportValidity()) return;
+  submitting = true;
+  signupButton.disabled = true;
+  signup.setAttribute("aria-busy", "true");
+  signupStatus.textContent = "Saving your place…";
+
+  try {
+    const response = await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: signupEmail.value.trim() }),
+      signal: AbortSignal.timeout(15000),
+    });
+    const result = await response.json();
+    if (!response.ok || result.success !== true) {
+      throw new Error(response.status === 429
+        ? "Please wait a minute and try again."
+        : "Couldn’t save your place. Please try again.");
+    }
+    signupStatus.textContent = "You’re on the list. Thanks for signing up.";
+    signup.reset();
+  } catch (error) {
+    signupStatus.textContent = error instanceof TypeError || error.name === "TimeoutError"
+      ? "Couldn’t connect. Please try again."
+      : error.message === "Please wait a minute and try again."
+        ? error.message
+        : "Couldn’t save your place. Please try again.";
+  } finally {
+    submitting = false;
+    signupButton.disabled = false;
+    signup.removeAttribute("aria-busy");
+  }
+});

@@ -8,7 +8,7 @@
       name="description"
       content="Silo is a small AI dongle for bringing capable intelligence wherever you need it. Multiple models. One compact device."
     />
-    <title>Silo — Intelligence, within reach.</title>
+    <title>Silo — Offline open-weight AI that connects to your device.</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
@@ -27,11 +27,9 @@
       <section class="hero" id="home" aria-labelledby="hero-title">
         <div class="intro page-width">
           <div>
-            <p class="eyebrow">
-              <span class="status-dot"></span> small device. open possibilities.
-            </p>
             <h1 id="hero-title" data-copy="headline">
-              Intelligence,<br />within reach.
+              <span class="accent">Offline</span> open-weight<br />AI that
+              connects to<br />your device.
             </h1>
           </div>
           <div class="intro-description">
@@ -39,16 +37,13 @@
               Silo is a small AI dongle for bringing capable intelligence
               wherever you need it.
             </p>
-            <p class="secondary" data-copy="subheading">
-              Your choice of models.<br />One quietly capable device.
-            </p>
           </div>
         </div>
 
         <div class="workbench">
           <div class="workbench-top">
             <div class="rail page-width">
-              <span class="eyebrow">FIG. 01 — INTELLIGENCE IN A SMALLER FORM</span
+              <span class="eyebrow">FIG. 01 — FORM FOLLOWS POSSIBILITY</span
               ><span class="eyebrow">SILO / EXPLORATION 001</span>
             </div>
           </div>
@@ -69,20 +64,20 @@
                   <g id="silo-drawing">
                     <text x="63.4" y="321" class="drawing-type">Silo</text>
                     <path
-                      d="M-520 74H1280M-520 321H1280M0 136H760M0 342H760"
+                      d="M-520 117.25H1280M-520 321H1280M0 109H760M0 168H760M0 342H760"
                       class="drawing-guide"
                     />
-                    <g class="drawing-geometry" transform="translate(14.1 0) scale(0.826 1)">
+                    <g class="drawing-geometry">
                       <path
-                        d="M81 30V370M265 30V370M348 30V370M429 30V370M642 30V370"
+                        d="M78 30V370M229.75 30V370M298.75 30V370M365.25 30V370M541.25 30V370"
                         class="drawing-guide"
                       />
                       <path
-                        d="M81 74H265V321H81ZM302 136H348V321H302ZM392 74H429V321H392ZM469 136H642V321H469Z"
+                        d="M78 117.25H229.75V321H78ZM260.75 109H298.75V321H260.75ZM335 117.25H365.25V321H335ZM398.5 168H541.25V321H398.5Z"
                         class="drawing-box"
                       />
-                      <circle cx="555.5" cy="228.5" r="86.5" class="drawing-guide" />
-                      <path d="M469 136L642 321M642 136L469 321" class="drawing-guide" />
+                      <ellipse cx="469.875" cy="244.5" rx="71.375" ry="76.5" class="drawing-guide" />
+                      <path d="M398.5 168L541.25 321M541.25 168L398.5 321" class="drawing-guide" />
                     </g>
                   </g>
                   <clipPath id="pointer-window">
@@ -93,15 +88,15 @@
                 <g class="drawing-highlight" clip-path="url(#pointer-window)">
                   <use href="#silo-drawing" />
                 </g>
-                <g class="registration" transform="translate(14.1 0) scale(0.826 1)">
+                <g class="registration">
                   <path
-                    d="M73 74H89M81 66V82M634 74H650M642 66V82M73 321H89M81 313V329M634 321H650M642 313V329"
+                    d="M70 117.25H86M78 109.25V125.25M533.25 117.25H549.25M541.25 109.25V125.25M70 321H86M78 313V329M533.25 321H549.25M541.25 313V329"
                   />
                 </g>
-                <g class="diagram-labels" transform="translate(14.1 0) scale(0.826 1)">
-                  <text x="81" y="55">A—01</text>
-                  <text x="81" y="362">FORM FOLLOWS POSSIBILITY</text>
-                  <text x="642" y="362" text-anchor="end">1 : 1</text>
+                <g class="diagram-labels">
+                  <text x="78" y="98.25">A—01</text>
+                  <text x="78" y="362">FORM FOLLOWS POSSIBILITY</text>
+                  <text x="541.25" y="362" text-anchor="end">1 : 1</text>
                 </g>
               </svg>
               <div class="blueprint-caption">
@@ -112,6 +107,35 @@
                 >
               </div>
             </div>
+            <form
+              class="launch-signup"
+              aria-labelledby="signup-title signup-copy"
+            >
+              <p id="signup-title" class="signup-price">
+                <strong>£145.</strong>
+                <span>Discounted from <s>£395</s>.</span>
+              </p>
+              <p id="signup-copy" class="signup-copy">
+                Be among the first to own SILO. Join the early-access list to
+                unlock exclusive launch pricing.
+              </p>
+              <div class="signup-fields">
+                <label class="sr-only" for="signup-email">Email address</label>
+                <input
+                  id="signup-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="Your email address"
+                  maxlength="254"
+                  required
+                />
+                <button type="submit">
+                  Get early access <span aria-hidden="true">→</span>
+                </button>
+              </div>
+              <p class="signup-status" role="status" aria-live="polite"></p>
+            </form>
           </div>
           <div class="workbench-bottom">
             <div class="rail page-width">
@@ -124,17 +148,40 @@
         </div>
       </section>
 
+      <section class="product-section" aria-label="The Silo device">
+        <figure class="product-shot reveal">
+          <img
+            src="/silo-device.webp"
+            width="1000"
+            height="1331"
+            alt="A hand holding Silo: a palm-sized white box with a dark green top edge and a small orange switch on the side."
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption class="product-caption rail page-width">
+            <span class="eyebrow">FIG. 02 — SILO, ACTUAL SIZE</span>
+            <p>
+              A palm-sized box that holds your models. Clip it to your phone or
+              plug it into your laptop.
+            </p>
+          </figcaption>
+        </figure>
+      </section>
+
       <section
         class="how-section page-width"
         id="how-it-works"
         aria-labelledby="how-title"
       >
         <div class="section-heading reveal">
-          <p class="eyebrow">01 / HOW IT WORKS</p>
-          <h2 id="how-title">Less between you<br />and what’s possible.</h2>
+          <div class="section-heading-copy">
+            <p class="eyebrow">01 / HOW IT WORKS</p>
+            <h2 id="how-title">Give your team room to think.</h2>
+          </div>
           <p>
-            A simple idea: bring capable AI closer.<br />In a form that fits
-            into your everyday.
+            Silo brings capable open-weight models into your team’s own
+            environment. Keep sensitive work private, stay useful when the
+            internet disappears, and make possibility feel close at hand.
           </p>
         </div>
         <div class="steps">
@@ -147,10 +194,10 @@
                 />
               </svg>
             </div>
-            <h3>A small connection.</h3>
+            <h3>Private by design.</h3>
             <p>
-              One compact dongle. A simple starting point for bringing AI into
-              your day.
+              Your team’s prompts, files, and ideas stay in the environment you
+              control. No cloud handoff required.
             </p>
           </article>
           <article class="step reveal">
@@ -162,10 +209,10 @@
                 />
               </svg>
             </div>
-            <h3>Your choice of intelligence.</h3>
+            <h3>Choice without compromise.</h3>
             <p>
-              Access multiple AI models through one device. Find the right fit
-              for what’s in front of you.
+              Keep several capable open-weight models in one place and choose
+              the right intelligence for the task in front of you.
             </p>
           </article>
           <article class="step reveal">
@@ -176,10 +223,10 @@
                 <path d="M2 24h12M8 18v12" stroke-dasharray="2 3" />
               </svg>
             </div>
-            <h3>Take possibility with you.</h3>
+            <h3>Ready when you are.</h3>
             <p>
-              From your desk to your next idea. Capable intelligence, wherever
-              you need it.
+              Work at your desk, in the field, or somewhere the internet is
+              unreliable. Your team’s intelligence stays close.
             </p>
           </article>
         </div>
@@ -192,10 +239,10 @@
       >
         <div class="section-heading reveal">
           <p class="eyebrow">02 / MANY MINDS. ONE SILO.</p>
-          <h2 id="models-title">Good company.</h2>
+          <h2 id="models-title">Your choice of 60+ models.</h2>
           <p>
-            Different strengths. Shared possibilities.<br />Meet the models
-            behind Silo.
+            Different strengths. Shared context.<br />Meet the models behind
+            Silo.
           </p>
         </div>
         <div class="model-grid reveal">
@@ -204,8 +251,8 @@
             <div class="model-logo">
               <img
                 src="/models/kimi.svg"
-                width="55"
-                height="55"
+                width="40"
+                height="40"
                 alt="Kimi logo"
                 loading="lazy"
               />
@@ -217,8 +264,8 @@
             <div class="model-logo">
               <img
                 src="/models/mistral.svg"
-                width="65"
-                height="46"
+                width="57"
+                height="40"
                 alt="Mistral AI logo"
                 loading="lazy"
               />
@@ -230,8 +277,8 @@
             <div class="model-logo">
               <img
                 src="/models/deepseek.webp"
-                width="65"
-                height="48"
+                width="81"
+                height="81"
                 alt="DeepSeek logo"
                 loading="lazy"
               />
@@ -244,8 +291,8 @@
     <footer class="footer">
       <div class="footer-meta page-width">
         <a href="#home" class="text-link"
-          >The future fits in your pocket. <span aria-hidden="true">↗</span></a
-        ><span class="footer-note">SMALL BY DESIGN.</span
+          >Form follows possibility. <span aria-hidden="true">↗</span></a
+        ><span class="footer-note">OFFLINE BY DESIGN.</span
         ><button
           id="motion-toggle"
           class="motion-toggle"
@@ -298,7 +345,7 @@
         </svg>
         <div class="footer-rail">
           <span class="footer-end eyebrow"
-            >SILO — INTELLIGENCE, WITHIN REACH.</span
+            >SILO — INTELLIGENCE, WITHIN YOUR CONTROL.</span
           ><a class="back-top" href="#home" aria-label="Back to top">↑</a>
         </div>
       </div>

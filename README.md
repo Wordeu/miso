@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. For production, run `npm run build` then `npm start`. Set `PORT` to change the port. The current page has no signup card; the Node waitlist endpoint is retained for a future signup surface.
+Open http://localhost:5173. For production, run `npm run build` then `npm start`. Set `PORT` to change the port. The signup form overlays the construction drawing and saves release-notification requests through the Node waitlist endpoint.
 
 ## Edit
 

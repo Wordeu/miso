@@ -1,8 +1,9 @@
 // Edit the primary copy here. Supporting section copy lives in index.html.
 export const content = {
-  headline: "Intelligence,<br />off the grid.",
+  headline:
+    '<span class="accent">Offline</span> open-weight<br />AI that connects to<br />your device.',
   description:
-    "Silo. Your own open-weight, infinitely secure AI, wherever you go.",
+    "A small box that clips to your phone or plugs into your laptop. Your chosen AI runs inside it, so what you tell it never leaves your hands.",
 };
 
 export const motion = {

@@ -197,7 +197,37 @@ h1 {
   font-size: clamp(38px, 4.2vw, 58px);
   line-height: 1.08;
   letter-spacing: -0.046em;
-  margin-top: 24px;
+  margin-top: 0;
+  position: relative;
+}
+.headline-reserve {
+  display: block;
+  visibility: hidden;
+}
+.headline-matrix {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.matrix-char {
+  position: absolute;
+  display: block;
+  white-space: pre;
+  color: var(--muted);
+  opacity: 0;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+.matrix-char.is-visible {
+  opacity: 1;
+}
+.matrix-char.is-resolved {
+  color: inherit;
+}
+h1 .accent,
+.matrix-char.accent.is-resolved {
+  color: var(--orange);
 }
 .intro-description {
   display: flex;
@@ -206,6 +236,7 @@ h1 {
   padding-top: 38px;
   max-width: 355px;
   justify-self: end;
+  text-align: right;
   font-size: 17px;
   line-height: 1.55;
   letter-spacing: -0.3px;
@@ -236,6 +267,110 @@ h1 {
   align-items: center;
   padding-block: 28px 44px;
 }
+.workbench-content > .blueprint,
+.launch-signup {
+  grid-area: 1 / 1;
+}
+.launch-signup {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  width: min(100%, 460px);
+  margin: 0;
+  padding: 32px 30px 14px;
+  color: #111;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+#signup-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px 8px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+.signup-price strong {
+  font-size: 28px;
+  font-weight: 500;
+}
+.signup-price span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.signup-price s {
+  text-decoration-thickness: 1px;
+  text-decoration-color: #a9aaa4;
+}
+.signup-copy {
+  max-width: 31em;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: -0.1px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.signup-fields {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.signup-fields input {
+  min-width: 0;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #d9d9d3;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+  font-size: 15px;
+  letter-spacing: -0.1px;
+  transition: border-color 0.2s ease;
+}
+.signup-fields input:hover {
+  border-color: #c7c8c1;
+}
+.signup-fields input::placeholder {
+  color: var(--muted);
+}
+.signup-fields button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: none;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 0;
+  background: #c44f20;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.signup-fields button span {
+  transition: transform 0.3s var(--ease);
+}
+.signup-fields button:hover:not(:disabled) span {
+  transform: translateX(3px);
+}
+.signup-fields button:hover:not(:disabled) {
+  background: #ad431a;
+}
+.signup-fields button:disabled {
+  opacity: 0.65;
+}
+.signup-status {
+  min-height: 1.5em;
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
 .blueprint {
   min-width: 0;
   position: relative;
@@ -245,7 +380,8 @@ h1 {
   --scroll-y: 0px;
 }
 .blueprint-svg {
-  width: 100%;
+  width: 90%;
+  margin-inline: auto;
   height: auto;
   overflow: visible;
   display: block;
@@ -260,8 +396,8 @@ h1 {
   font-size: 280px;
   font-weight: 500;
   letter-spacing: 0;
-  fill: rgba(160, 160, 150, 0.03);
-  stroke: #c3c4bd;
+  fill: rgba(160, 160, 150, 0.018);
+  stroke: #d0d1ca;
   stroke-width: 1;
   stroke-dasharray: 4 5;
   animation: dash-travel 5s linear infinite;
@@ -277,21 +413,21 @@ h1 {
   animation: dash-travel 5s linear infinite;
 }
 .drawing-base {
-  opacity: 0.7;
+  opacity: 0.45;
 }
 .drawing-highlight {
   opacity: 0;
   transition: opacity 0.5s;
 }
 .drawing-highlight .drawing-type {
-  stroke: #7b7d73;
-  fill: #f0f0eb;
+  stroke: #d19a7e;
+  fill: transparent;
 }
 .drawing-highlight .drawing-guide,
 .drawing-highlight .drawing-box {
-  stroke: #9c9e92;
+  stroke: #d19a7e;
 }
-.blueprint:is(:hover, :focus-visible, .is-active) .drawing-highlight {
+.blueprint:is(:hover, .is-active) .drawing-highlight {
   opacity: 1;
 }
 .registration {
@@ -311,7 +447,7 @@ h1 {
   font-family: system-ui, sans-serif;
   font-size: 10px;
   color: var(--muted);
-  margin: 14px 15.526% 0 10.658%;
+  margin: 14px 28.783% 0 10.263%;
   transform: translateX(var(--blueprint-offset));
 }
 .crosshair {
@@ -343,6 +479,32 @@ h1 {
 .text-link:hover span {
   transform: translate(3px, -3px);
 }
+.product-section {
+  padding-top: clamp(40px, 5vw, 72px);
+}
+.product-shot {
+  margin: 0;
+}
+.product-shot img {
+  display: block;
+  width: min(380px, 64vw);
+  height: auto;
+  margin-inline: auto;
+  margin-bottom: clamp(8px, 0.8vw, 10px);
+}
+.product-caption {
+  align-items: baseline;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.product-caption p {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+  text-align: right;
+}
 .how-section {
   padding-block: var(--section);
 }
@@ -351,6 +513,14 @@ h1 {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
   gap: 44px;
   align-items: start;
+}
+.how-section .section-heading {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+.section-heading-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 .section-heading .eyebrow {
   padding-top: 7px;
@@ -439,31 +609,27 @@ h1 {
 }
 .models-section .model-logo {
   height: 60px;
-  width: 75px;
+  width: 85px;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .models-section .model-logo img {
-  max-width: 65px;
-  max-height: 49px;
   width: auto;
-  height: auto;
+  height: 40px;
   object-fit: contain;
   object-position: center;
 }
 .models-section .model-grid figure:first-child img {
-  width: 39px;
-  height: 39px;
-  max-width: 45px;
-  max-height: 45px;
+  width: 40px;
+  height: 40px;
 }
 .models-section .model-grid figure:last-child img {
-  width: 70px;
-  height: 70px;
-  max-width: 70px;
-  max-height: 70px;
+  /* The DeepSeek artwork only fills the middle ~49% of its square canvas, so
+     it is scaled up to land on the same 40px mark height as the others. */
+  width: 81px;
+  height: 81px;
   filter: grayscale(1) contrast(3);
   mix-blend-mode: multiply;
 }
@@ -678,6 +844,9 @@ h1 {
     grid-column: 2;
     padding-top: 0;
   }
+  .how-section .section-heading {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  }
   .steps,
   .model-grid {
     gap: 28px;
@@ -734,6 +903,16 @@ h1 {
   }
   .workbench-content {
     padding-block: 20px 36px;
+    min-height: 330px;
+  }
+  .launch-signup {
+    padding: 22px 18px;
+  }
+  .signup-fields {
+    flex-direction: column;
+  }
+  .signup-fields input {
+    font-size: 16px;
   }
   .blueprint {
     width: 100%;
@@ -749,6 +928,15 @@ h1 {
   .workbench-bottom .rail {
     gap: 10px;
   }
+  .product-caption {
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+  }
+  .product-caption p {
+    text-align: left;
+    font-size: 12px;
+  }
   .workbench-bottom .eyebrow {
     font-size: 8px;
   }
@@ -758,6 +946,9 @@ h1 {
   }
   .section-heading {
     display: block;
+  }
+  .section-heading-copy {
+    gap: 0;
   }
   .section-heading h2 {
     margin-top: 22px;
@@ -778,7 +969,7 @@ h1 {
     padding-block: 45px 54px;
   }
   .models-section .model-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 0;
   }
