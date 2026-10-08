@@ -80,20 +80,38 @@
                       <path d="M398.5 168L541.25 321M541.25 168L398.5 321" class="drawing-guide" />
                     </g>
                   </g>
-                  <clipPath id="pointer-window">
+                  <clipPath
+                    id="pointer-window"
+                    transform="translate(380 200) scale(1.1) translate(-380 -200)"
+                  >
                     <circle class="pointer-window" cx="361" cy="197" r="108" />
                   </clipPath>
                 </defs>
-                <g class="drawing-base"><use href="#silo-drawing" /></g>
-                <g class="drawing-highlight" clip-path="url(#pointer-window)">
+                <g
+                  class="drawing-base"
+                  transform="translate(380 200) scale(1.1) translate(-380 -200)"
+                >
                   <use href="#silo-drawing" />
                 </g>
-                <g class="registration">
+                <g
+                  class="drawing-highlight"
+                  clip-path="url(#pointer-window)"
+                  transform="translate(380 200) scale(1.1) translate(-380 -200)"
+                >
+                  <use href="#silo-drawing" />
+                </g>
+                <g
+                  class="registration"
+                  transform="translate(380 200) scale(1.1) translate(-380 -200)"
+                >
                   <path
                     d="M70 117.25H86M78 109.25V125.25M533.25 117.25H549.25M541.25 109.25V125.25M70 321H86M78 313V329M533.25 321H549.25M541.25 313V329"
                   />
                 </g>
-                <g class="diagram-labels">
+                <g
+                  class="diagram-labels"
+                  transform="translate(380 200) scale(1.1) translate(-380 -200)"
+                >
                   <text x="78" y="98.25">A—01</text>
                   <text x="78" y="362">FORM FOLLOWS POSSIBILITY</text>
                   <text x="541.25" y="362" text-anchor="end">1 : 1</text>
@@ -151,10 +169,10 @@
       <section class="product-section" aria-label="The Silo device">
         <figure class="product-shot reveal">
           <img
-            src="/silo-device.webp"
-            width="1000"
-            height="1331"
-            alt="A hand holding Silo: a palm-sized white box with a dark green top edge and a small orange switch on the side."
+            src="/silo-device.png"
+            width="1100"
+            height="1430"
+            alt="A hand holding Silo: a palm-sized black box with an orange top edge and Silo lettering."
             loading="lazy"
             decoding="async"
           />

@@ -26,9 +26,11 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 32px;
+  overflow-x: clip;
 }
 body {
   margin: 0;
+  overflow-x: clip;
 }
 button,
 input {
@@ -374,6 +376,7 @@ h1 .accent,
 .blueprint {
   min-width: 0;
   position: relative;
+  overflow: hidden;
   --blueprint-offset: clamp(26px, 7.7vw, 104px);
   --move-x: 0px;
   --move-y: 0px;
