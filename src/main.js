@@ -14,6 +14,38 @@ let manuallyDisabled = false;
 let scrollFrame = 0;
 let headlineChars = [];
 let headlineFrame = 0;
+const heroNote = document.querySelector(".hero-note");
+
+const promptStack = document.querySelector(".intro-prompt-stack");
+const promptNodes = content.prompts.map((text, index) => {
+  const node = document.createElement("span");
+  node.className = `intro-prompt${index === 0 ? " is-current" : ""}`;
+  node.textContent = text;
+  return node;
+});
+promptStack.replaceChildren(...promptNodes);
+document.querySelector("[data-prompt-summary]").textContent = content.prompts.join(" ");
+let promptIndex = 0;
+let promptTimer = 0;
+let promptsInView = false;
+
+function updatePromptRotation() {
+  clearTimeout(promptTimer);
+  if (!motionEnabled || document.hidden || !promptsInView) return;
+  promptTimer = setTimeout(() => {
+    for (const node of promptNodes) node.classList.remove("is-leaving");
+    promptNodes[promptIndex].classList.replace("is-current", "is-leaving");
+    promptIndex = (promptIndex + 1) % promptNodes.length;
+    promptNodes[promptIndex].classList.add("is-current");
+    updatePromptRotation();
+  }, 3400);
+}
+
+new IntersectionObserver(([entry]) => {
+  promptsInView = entry.isIntersecting;
+  updatePromptRotation();
+}).observe(promptStack);
+document.addEventListener("visibilitychange", updatePromptRotation);
 
 const matrixAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#$%&@*";
 
@@ -24,6 +56,7 @@ function finishHeadline() {
     character.node.textContent = character.value;
     character.node.classList.add("is-visible", "is-resolved");
   }
+  heroNote?.classList.add("is-visible");
 }
 
 function startHeadlineMatrix() {
@@ -37,6 +70,7 @@ function startHeadlineMatrix() {
     return;
   }
   if (headlineFrame) cancelAnimationFrame(headlineFrame);
+  heroNote?.classList.remove("is-visible");
   for (const character of headlineChars)
     character.node.classList.remove("is-visible", "is-resolved");
   const startedAt = performance.now();
@@ -60,7 +94,10 @@ function startHeadlineMatrix() {
         character.node.classList.add("is-visible", "is-resolved");
       }
     }
-    if (complete) headlineFrame = 0;
+    if (complete) {
+      headlineFrame = 0;
+      heroNote?.classList.add("is-visible");
+    }
     else headlineFrame = requestAnimationFrame(tick);
   };
   headlineFrame = requestAnimationFrame(tick);
@@ -138,6 +175,7 @@ function setMotion(enabled) {
   toggle.disabled = reducedMotion.matches;
   if (motionEnabled) startHeadlineMatrix();
   else finishHeadline();
+  updatePromptRotation();
   updateScroll();
 }
 

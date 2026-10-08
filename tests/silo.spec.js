@@ -118,6 +118,9 @@ test("mobile hero wraps normally and aligns with its description after resizing"
     }
     await expect(reserve).toBeVisible();
     await expect(matrix).toBeHidden();
+    expect(await reserve.innerText()).toBe(
+      "Offline\nopen-weight\nAI that connects\nto your device.",
+    );
     await expect(page.locator(".intro-description")).toHaveCSS("text-align", "left");
     const heading = await page.locator("#hero-title").boundingBox();
     const description = await page.locator(".intro-description").boundingBox();
