@@ -454,6 +454,8 @@ h1 {
   object-position: center;
 }
 .models-section .model-grid figure:first-child img {
+  width: 39px;
+  height: 39px;
   max-width: 45px;
   max-height: 45px;
 }
