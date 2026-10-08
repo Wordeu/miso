@@ -104,6 +104,29 @@ test("page and supplied assets load without errors at desktop and mobile widths"
   expect(errors).toEqual([]);
 });
 
+test("mobile hero wraps normally and aligns with its description after resizing", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  for (const width of [390, 320, 430, 700, 1440, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    const reserve = page.locator(".headline-reserve");
+    const matrix = page.locator(".headline-matrix");
+    if (width > 700) {
+      await expect(matrix).toBeVisible();
+      await expect(reserve).toBeHidden();
+      continue;
+    }
+    await expect(reserve).toBeVisible();
+    await expect(matrix).toBeHidden();
+    await expect(page.locator(".intro-description")).toHaveCSS("text-align", "left");
+    const heading = await page.locator("#hero-title").boundingBox();
+    const description = await page.locator(".intro-description").boundingBox();
+    expect(Math.abs(heading.x - description.x)).toBeLessThan(1);
+    expect(description.y - (heading.y + heading.height)).toBeGreaterThanOrEqual(27);
+    expect(heading.x + heading.width).toBeLessThanOrEqual(width);
+  }
+});
+
 test("drawing supports keyboard, pointer, scroll reveal and motion toggle", async ({
   page,
 }) => {

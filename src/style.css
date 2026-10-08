@@ -883,8 +883,16 @@ h1 .accent,
     font-size: 48px;
     margin-top: 22px;
   }
+  /* Native text wrapping avoids Safari's per-character positioning errors. */
+  .headline-reserve {
+    visibility: visible;
+  }
+  .headline-matrix {
+    display: none;
+  }
   .intro-description {
     justify-self: start;
+    text-align: left;
     gap: 24px;
     padding: 0;
     max-width: 340px;
