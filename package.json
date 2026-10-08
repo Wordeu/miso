@@ -1,0 +1,19 @@
+{
+  "name": "silo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "build": "vite build",
+    "start": "node server.mjs --production",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "vite": "^6.4.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0"
+  }
+}
