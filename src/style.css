@@ -548,12 +548,31 @@ h1 .accent,
 .product-shot {
   margin: 0;
 }
-.product-shot img {
+.product-image {
+  position: relative;
   display: block;
   width: min(380px, 64vw);
-  height: auto;
+  aspect-ratio: 1100 / 1430;
   margin-inline: auto;
   margin-bottom: 0;
+  outline: none;
+}
+.product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.product-image-hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.65s ease;
+}
+.product-image:hover .product-image-hover,
+.product-image:focus-visible .product-image-hover {
+  opacity: 1;
 }
 .product-caption {
   align-items: baseline;
