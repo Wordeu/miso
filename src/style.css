@@ -490,7 +490,7 @@ h1 .accent,
   width: min(380px, 64vw);
   height: auto;
   margin-inline: auto;
-  margin-bottom: clamp(8px, 0.8vw, 10px);
+  margin-bottom: 0;
 }
 .product-caption {
   align-items: baseline;
