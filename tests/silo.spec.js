@@ -16,7 +16,7 @@ test("signup submits to Formspree and supports keyboard submission", async ({ pa
   const email = `launch-${Date.now()}@example.com`;
   const input = page.getByRole("textbox", { name: "Email address" });
   await expect(page.locator("#signup-title")).toHaveText(
-    "£145. Discounted from £395.",
+    "£1,800. Early-access price.",
   );
   await expect(page.locator("#signup-copy")).toHaveText(
     "Be among the first to own SILO. Join the early-access list to unlock exclusive launch pricing.",
