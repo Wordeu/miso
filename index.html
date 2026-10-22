@@ -61,7 +61,7 @@
               class="blueprint motion-surface"
               tabindex="0"
               role="img"
-              aria-label="Interactive AI construction drawing. Move your pointer, touch, or use the arrow keys to explore. Escape resets the drawing."
+              aria-label="Interactive Orla construction drawing. Move your pointer, touch, or use the arrow keys to explore. Escape resets the drawing."
             >
               <svg
                 class="blueprint-svg"
@@ -70,22 +70,23 @@
                 aria-hidden="true"
               >
                 <defs>
-                  <g id="ai-drawing">
-                    <text x="63.4" y="321" textLength="478" lengthAdjust="spacingAndGlyphs" class="drawing-type">AI</text>
+                  <g id="orla-drawing">
+                    <text x="63.4" y="321" textLength="478" lengthAdjust="spacingAndGlyphs" class="drawing-type">Orla</text>
                     <path
                       d="M-520 117.25H1280M-520 321H1280M0 109H760M0 168H760M0 342H760"
                       class="drawing-guide"
                     />
                     <g class="drawing-geometry">
                       <path
-                        d="M78 30V370M244 30V370M410 30V370M444 30V370M541.25 30V370"
+                        d="M78 30V370M229.75 30V370M298.75 30V370M365.25 30V370M541.25 30V370"
                         class="drawing-guide"
                       />
                       <path
-                        d="M78 117.25H410V321H78ZM444 117.25H541.25V321H444Z"
+                        d="M78 117.25H229.75V321H78ZM260.75 109H298.75V321H260.75ZM335 117.25H365.25V321H335ZM398.5 168H541.25V321H398.5Z"
                         class="drawing-box"
                       />
-                      <path d="M78 321L244 117.25L410 321M135 250H353M492.625 117.25V321" class="drawing-guide" />
+                      <ellipse cx="469.875" cy="244.5" rx="71.375" ry="76.5" class="drawing-guide" />
+                      <path d="M398.5 168L541.25 321M541.25 168L398.5 321" class="drawing-guide" />
                     </g>
                   </g>
                   <clipPath
@@ -99,14 +100,14 @@
                   class="drawing-base"
                   transform="translate(380 200) scale(1.2) translate(-380 -200)"
                 >
-                  <use href="#ai-drawing" />
+                  <use href="#orla-drawing" />
                 </g>
                 <g
                   class="drawing-highlight"
                   clip-path="url(#pointer-window)"
                   transform="translate(380 200) scale(1.2) translate(-380 -200)"
                 >
-                  <use href="#ai-drawing" />
+                  <use href="#orla-drawing" />
                 </g>
                 <g
                   class="registration"
