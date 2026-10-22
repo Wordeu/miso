@@ -1,4 +1,4 @@
-# Silo
+# Orla
 
 A responsive hardware landing page, built with semantic HTML, CSS, SVG, and vanilla JavaScript. Vite handles development and production assets; Formspree collects early-access signups.
 
@@ -36,4 +36,4 @@ Browser checks use installed Google Chrome and a separate production server on p
 
 ## Reference
 
-Inspected the live https://normal.ai page, its HTML, stylesheet, and interactions, alongside the supplied screenshot. Silo independently implements the reference's restrained construction drawings, traveling dashed outlines, pointer reveal, scroll motion, and oversized footer typography. Normal's code, fonts, branding, and assets are not included. Inter is self-hosted through `@fontsource/inter`; the model logos are the user-supplied assets.
+Inspected the live https://normal.ai page, its HTML, stylesheet, and interactions, alongside the supplied screenshot. Orla independently implements the reference's restrained construction drawings, traveling dashed outlines, pointer reveal, scroll motion, and oversized footer typography. Normal's code, fonts, branding, and assets are not included. Inter is self-hosted through `@fontsource/inter`; the model logos are the user-supplied assets.

@@ -153,7 +153,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 server.listen(port, "0.0.0.0", () =>
-  console.log(`Silo is running at http://localhost:${port}`),
+  console.log(`Orla is running at http://localhost:${port}`),
 );
 for (const signal of ["SIGTERM", "SIGINT"])
   process.on(signal, async () => {

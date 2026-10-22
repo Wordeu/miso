@@ -19,7 +19,7 @@ test("signup submits to Formspree and supports keyboard submission", async ({ pa
     "£1,800. Early-access price.",
   );
   await expect(page.locator("#signup-copy")).toHaveText(
-    "Be among the first to own SILO. Join the early-access list to unlock exclusive launch pricing.",
+    "Be among the first to own Orla. Join the early-access list to unlock exclusive launch pricing.",
   );
   await expect(page.locator(".signup-fields button")).toHaveText(
     "Get early access →",
@@ -79,7 +79,7 @@ test("page and supplied assets load without errors at desktop and mobile widths"
   await page.goto("/");
   await expect(
     page,
-  ).toHaveTitle("Silo — Offline open-weight AI that connects to your device.");
+  ).toHaveTitle("Orla — Offline open-weight AI that connects to your device.");
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     expect(
