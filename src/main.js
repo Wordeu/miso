@@ -339,6 +339,24 @@ for (const link of navLinks)
   navObserver.observe(document.querySelector(link.hash));
 
 const signup = document.querySelector(".launch-signup");
+for (const portrait of document.querySelectorAll(".team-portrait")) {
+  let blurTimer;
+  const revealPortrait = () => {
+    clearTimeout(blurTimer);
+    portrait.classList.add("is-clear");
+    // Allow the short reveal transition, then hold the clear image for four seconds.
+    const revealDuration = motionEnabled ? 200 : 0;
+    blurTimer = setTimeout(() => portrait.classList.remove("is-clear"), 4000 + revealDuration);
+  };
+  portrait.addEventListener("pointerenter", (event) => {
+    if (event.pointerType !== "touch") revealPortrait();
+  });
+  portrait.addEventListener("focus", () => {
+    if (portrait.matches(":focus-visible")) revealPortrait();
+  });
+  portrait.addEventListener("click", revealPortrait);
+}
+
 const signupEmail = signup.querySelector("input");
 const signupButton = signup.querySelector("button");
 const signupStatus = signup.querySelector(".signup-status");
@@ -350,7 +368,7 @@ signup.addEventListener("submit", async (event) => {
   submitting = true;
   signupButton.disabled = true;
   signup.setAttribute("aria-busy", "true");
-  signupStatus.textContent = "Saving your place…";
+  signupStatus.textContent = "Sending your details…";
 
   try {
     const response = await fetch(signup.action, {
@@ -365,16 +383,16 @@ signup.addEventListener("submit", async (event) => {
     if (!response.ok) {
       throw new Error(response.status === 429
         ? "Please wait a minute and try again."
-        : "Couldn’t save your place. Please try again.");
+        : "Couldn’t send your details. Please try again.");
     }
-    signupStatus.textContent = "You’re on the list. Thanks for signing up.";
+    signupStatus.textContent = "Thanks for getting in touch. We’ll be in contact.";
     signup.reset();
   } catch (error) {
     signupStatus.textContent = error instanceof TypeError || error.name === "TimeoutError"
       ? "Couldn’t connect. Please try again."
       : error.message === "Please wait a minute and try again."
         ? error.message
-        : "Couldn’t save your place. Please try again.";
+        : "Couldn’t send your details. Please try again.";
   } finally {
     submitting = false;
     signupButton.disabled = false;

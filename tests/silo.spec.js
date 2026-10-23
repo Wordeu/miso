@@ -16,13 +16,13 @@ test("signup submits to Formspree and supports keyboard submission", async ({ pa
   const email = `launch-${Date.now()}@example.com`;
   const input = page.getByRole("textbox", { name: "Email address" });
   await expect(page.locator("#signup-title")).toHaveText(
-    "£1,800. Early-access price.",
+    "Help shape Orla.",
   );
   await expect(page.locator("#signup-copy")).toHaveText(
-    "Be among the first to own Orla. Join the early-access list to unlock exclusive launch pricing.",
+    "We’re speaking with teams whose essential work depends on the cloud. Leave your email to discuss what needs to keep running and help shape our first use cases.",
   );
   await expect(page.locator(".signup-fields button")).toHaveText(
-    "Get early access →",
+    "Talk to us →",
   );
   await input.fill(email);
   const submission = page.waitForRequest(formspreeEndpoint);
@@ -31,14 +31,14 @@ test("signup submits to Formspree and supports keyboard submission", async ({ pa
   expect(request.method()).toBe("POST");
   expect(request.headers().accept).toBe("application/json");
   expect(request.postDataJSON()).toEqual({ email });
-  await expect(page.getByRole("status")).toHaveText("You’re on the list. Thanks for signing up.");
+  await expect(page.getByRole("status")).toHaveText("Thanks for getting in touch. We’ll be in contact.");
   await expect(input).toHaveValue("");
 });
 
 test("signup preserves the email after a network failure and allows retry", async ({ page }) => {
   await page.goto("/");
   const input = page.getByRole("textbox", { name: "Email address" });
-  const button = page.getByRole("button", { name: "Get early access" });
+  const button = page.getByRole("button", { name: "Talk to us" });
   await page.route(formspreeEndpoint, (route) => route.abort());
   await input.fill("retry@example.com");
   await button.click();
@@ -47,13 +47,13 @@ test("signup preserves the email after a network failure and allows retry", asyn
   await expect(button).toBeEnabled();
   await page.unroute(formspreeEndpoint);
   await button.click();
-  await expect(page.getByRole("status")).toHaveText("You’re on the list. Thanks for signing up.");
+  await expect(page.getByRole("status")).toHaveText("Thanks for getting in touch. We’ll be in contact.");
 });
 
 test("signup preserves the email when Formspree rejects a submission", async ({ page }) => {
   await page.goto("/");
   const input = page.getByRole("textbox", { name: "Email address" });
-  const button = page.getByRole("button", { name: "Get early access" });
+  const button = page.getByRole("button", { name: "Talk to us" });
   await input.fill("retry@example.com");
   for (const status of [422, 429, 500]) {
     await page.route(formspreeEndpoint, (route) => route.fulfill({
@@ -64,7 +64,7 @@ test("signup preserves the email when Formspree rejects a submission", async ({ 
     await button.click();
     await expect(page.getByRole("status")).toHaveText(status === 429
       ? "Please wait a minute and try again."
-      : "Couldn’t save your place. Please try again.");
+      : "Couldn’t send your details. Please try again.");
     await expect(input).toHaveValue("retry@example.com");
     await expect(button).toBeEnabled();
     await page.unroute(formspreeEndpoint);
@@ -79,7 +79,7 @@ test("page and supplied assets load without errors at desktop and mobile widths"
   await page.goto("/");
   await expect(
     page,
-  ).toHaveTitle("Orla — Offline open-weight AI that connects to your device.");
+  ).toHaveTitle("Orla — Keep essential services running when the cloud goes down.");
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     expect(
@@ -90,8 +90,8 @@ test("page and supplied assets load without errors at desktop and mobile widths"
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.locator(".blueprint")).toBeVisible();
   }
-  await page.locator("#models").scrollIntoViewIfNeeded();
-  for (const name of ["Kimi logo", "Mistral AI logo", "DeepSeek logo"]) {
+  await page.locator("#team").scrollIntoViewIfNeeded();
+  for (const name of ["Alice", "Johnny", "Tanzim"]) {
     await expect(page.getByAltText(name)).toBeVisible();
     await expect
       .poll(() =>
@@ -119,7 +119,7 @@ test("mobile hero wraps normally and aligns with its description after resizing"
     await expect(reserve).toBeVisible();
     await expect(matrix).toBeHidden();
     expect(await reserve.innerText()).toBe(
-      "Offline\nopen-weight\nAI that connects\nto your device.",
+      "Keep essential services running when the cloud goes down.",
     );
     await expect(page.locator(".intro-description")).toHaveCSS("text-align", "left");
     const heading = await page.locator("#hero-title").boundingBox();
@@ -146,8 +146,8 @@ test("drawing supports keyboard, pointer, scroll reveal and motion toggle", asyn
   const box = await drawing.boundingBox();
   await page.mouse.move(box.x + box.width * 0.75, box.y + box.height * 0.4);
   await expect(page.locator(".drawing-highlight")).toHaveCSS("opacity", "1");
-  await page.locator("#models").scrollIntoViewIfNeeded();
-  await expect(page.locator(".model-grid")).toHaveCSS("opacity", "1");
+  await page.locator("#why-now").scrollIntoViewIfNeeded();
+  await expect(page.locator(".research-copy")).toHaveCSS("opacity", "1");
   await page.locator(".footer-drawing").scrollIntoViewIfNeeded();
   await expect
     .poll(() =>
@@ -181,15 +181,30 @@ test("reduced motion stays static and navigation works from the keyboard", async
   await expect(
     page.getByRole("button", { name: "Reduced motion" }),
   ).toBeDisabled();
-  const modelsLink = page
+  const whyLink = page
     .getByRole("navigation")
-    .getByRole("link", { name: "Models", exact: true });
-  await modelsLink.focus();
+    .getByRole("link", { name: "Why now", exact: true });
+  await whyLink.focus();
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/#models$/);
+  await expect(page).toHaveURL(/#why-now$/);
   await expect(
-    page.getByRole("heading", { name: "Your choice of 60+ models." }),
+    page.getByRole("heading", { name: "Local intelligence is becoming more practical." }),
   ).toBeInViewport();
+});
+
+test("page explains the developing local network and keeps Johnny in the middle", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("[data-copy='description']")).toContainText("We’re developing a network of secure local computers");
+  await expect(page.locator(".steps")).toContainText("enough spare computing power");
+  await expect(page.locator(".steps")).toContainText("pause lower-priority processing");
+  await expect(page.locator(".product-section")).toHaveCount(0);
+  await expect(page.locator('img[src^="/orla-device"]')).toHaveCount(0);
+  await expect(page.locator(".team-member h3")).toHaveText(["Alice", "Johnny", "Tanzim"]);
+  const johnny = page.locator("[aria-labelledby='johnny-name']");
+  await expect(johnny).toContainText("He also supported a $12m funding round");
+  await expect(johnny).not.toContainText(/London School of Economics|LSE/);
+  await expect(page.locator("main")).not.toContainText(/Free Forever|£1,800|60\+ models|clips to your phone/);
+  await expect(page.locator("main")).not.toContainText(";");
 });
 
 test("API rejects malformed input and never exposes saved email addresses", async ({

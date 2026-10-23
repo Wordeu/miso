@@ -1,22 +1,13 @@
 // Edit the primary copy here. Supporting section copy lives in index.html.
 export const content = {
   headline:
-    '<span class="accent">Offline</span> <br class="br-mobile" />open-weight<br />AI that connects <br class="br-mobile" />to <br class="br-desktop" />your device.',
+    'Keep essential services running when the <span class="accent">cloud goes down.</span>',
   description:
-    "A small box that clips to your phone or plugs into your laptop. Your chosen AI runs inside it, so what you tell it never leaves your hands.",
+    "We’re developing a network of secure local computers that work together, so your organisation can run essential services without relying on the cloud.",
   prompts: [
-    "Flying?",
-    "Need security?",
-    "Need privacy?",
-    "Working without Wi-Fi?",
-    "Travelling off-grid?",
-    "Don't want an AI subscription?",
-    "Working remote?",
-    "Working with medical data?",
-    "Handling sensitive client work?",
-    "Need AI on the move?",
-    "Handling confidential work?",
-    "Want AI on your terms?",
+    "What needs to keep running?",
+    "What if the cloud goes down?",
+    "Which tasks should come first?",
   ],
 };
 

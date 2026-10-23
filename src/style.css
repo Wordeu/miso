@@ -665,6 +665,42 @@ h1 .accent,
   line-height: 1.8;
   color: var(--muted);
 }
+.network-intro {
+  max-width: 70ch;
+  margin-top: 32px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.why-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 80px);
+  border-top: 1px solid var(--line);
+  padding-block: var(--section);
+}
+.why-section .section-heading {
+  display: block;
+}
+.why-section h2 {
+  margin-top: 20px;
+}
+.why-section .section-heading > p:last-child,
+.research-copy p {
+  margin-top: 18px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.research-copy h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+.research-copy .text-link {
+  margin-top: 24px;
+  color: #ad431a;
+}
 .models-section {
   border-top: 1px solid var(--line);
   padding-block: var(--section);
@@ -748,11 +784,11 @@ h1 .accent,
 }
 .team-section {
   border-top: 1px solid var(--line);
-  padding-block: var(--section);
+  padding-block: clamp(56px, 7vw, 88px);
   text-align: center;
 }
 .team-heading h2 {
-  margin-top: 20px;
+  margin-top: 16px;
   font-size: 29px;
   line-height: 1.2;
   letter-spacing: -0.034em;
@@ -760,38 +796,55 @@ h1 .accent,
 .team-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(24px, 4vw, 48px);
-  max-width: 1000px;
-  margin: 48px auto 0;
+  gap: clamp(24px, 3.5vw, 40px);
+  max-width: 940px;
+  margin: 40px auto 0;
 }
-.team-member img {
+.team-portrait {
   display: block;
   width: 100%;
-  max-width: 280px;
-  height: auto;
+  max-width: 240px;
   aspect-ratio: 1;
-  object-fit: cover;
   margin-inline: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--faint);
+}
+.team-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  filter: blur(8px);
+  transition: filter 1.2s ease;
+}
+.team-portrait.is-clear img {
+  filter: blur(0);
+  transition-duration: 0.2s;
 }
 .team-member h3 {
-  margin-top: 22px;
-  font-size: 22px;
+  margin-top: 18px;
+  font-size: 20px;
   line-height: 1.3;
   letter-spacing: -0.035em;
 }
 .team-role {
-  margin-top: 6px;
-  font-size: 12px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
   line-height: 1.5;
 }
 .team-bio {
   margin-top: 14px;
   color: var(--muted);
   font-size: 13px;
-  line-height: 1.75;
+  line-height: 1.7;
 }
 .team-bio p + p {
-  margin-top: 12px;
+  margin-top: 10px;
 }
 .footer {
   padding-top: 36px;
@@ -1018,7 +1071,7 @@ h1 .accent,
     gap: 28px;
   }
   h1 {
-    /* Scales so the four headline lines never re-wrap on narrow phones. */
+    /* Keep the headline comfortable to read on narrow phones. */
     font-size: min(46px, calc((100vw - 48px) / 7.5));
     margin-top: 22px;
   }
@@ -1200,9 +1253,12 @@ h1 .accent,
   }
   .team-grid {
     grid-template-columns: minmax(0, 1fr);
-    max-width: 340px;
-    gap: 48px;
+    max-width: 320px;
+    gap: 40px;
     margin-top: 36px;
+  }
+  .why-section {
+    grid-template-columns: minmax(0, 1fr);
   }
   .footer {
     padding-top: 24px;
