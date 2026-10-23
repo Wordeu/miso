@@ -153,6 +153,7 @@ nav {
 }
 nav a {
   display: flex;
+  white-space: nowrap;
   gap: 9px;
   align-items: center;
   min-height: 44px;
@@ -745,6 +746,53 @@ h1 .accent,
   height: 40px;
   mix-blend-mode: multiply;
 }
+.team-section {
+  border-top: 1px solid var(--line);
+  padding-block: var(--section);
+  text-align: center;
+}
+.team-heading h2 {
+  margin-top: 20px;
+  font-size: 29px;
+  line-height: 1.2;
+  letter-spacing: -0.034em;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 48px);
+  max-width: 1000px;
+  margin: 48px auto 0;
+}
+.team-member img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  margin-inline: auto;
+}
+.team-member h3 {
+  margin-top: 22px;
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: -0.035em;
+}
+.team-role {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.team-bio {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.75;
+}
+.team-bio p + p {
+  margin-top: 12px;
+}
 .footer {
   padding-top: 36px;
   border-top: 1px solid var(--line);
@@ -948,17 +996,20 @@ h1 .accent,
 @media (max-width: 700px) {
   .header {
     height: 88px;
+    gap: 12px;
+  }
+  .wordmark {
+    width: 48px;
   }
   nav {
-    gap: 17px;
+    gap: 12px;
     font-size: 11px;
   }
   nav a {
     gap: 6px;
   }
   nav i {
-    width: 5px;
-    height: 5px;
+    display: none;
   }
   .intro {
     padding-top: 56px;
@@ -1146,6 +1197,12 @@ h1 .accent,
   }
   .model-grid figcaption {
     margin-right: auto;
+  }
+  .team-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 340px;
+    gap: 48px;
+    margin-top: 36px;
   }
   .footer {
     padding-top: 24px;
