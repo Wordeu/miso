@@ -795,9 +795,9 @@ h1 .accent,
 }
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(24px, 3.5vw, 40px);
-  max-width: 940px;
+  max-width: 600px;
   margin: 40px auto 0;
 }
 .team-portrait {

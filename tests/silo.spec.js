@@ -91,7 +91,7 @@ test("page and supplied assets load without errors at desktop and mobile widths"
     await expect(page.locator(".blueprint")).toBeVisible();
   }
   await page.locator("#team").scrollIntoViewIfNeeded();
-  for (const name of ["Alice", "Johnny", "Tanzim"]) {
+  for (const name of ["Alice", "Johnny"]) {
     await expect(page.getByAltText(name)).toBeVisible();
     await expect
       .poll(() =>
@@ -192,14 +192,16 @@ test("reduced motion stays static and navigation works from the keyboard", async
   ).toBeInViewport();
 });
 
-test("page explains the developing local network and keeps Johnny in the middle", async ({ page }) => {
+test("page explains the developing local network and shows the two founders", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("[data-copy='description']")).toContainText("We’re developing a network of secure local computers");
   await expect(page.locator(".steps")).toContainText("enough spare computing power");
   await expect(page.locator(".steps")).toContainText("pause lower-priority processing");
   await expect(page.locator(".product-section")).toHaveCount(0);
   await expect(page.locator('img[src^="/orla-device"]')).toHaveCount(0);
-  await expect(page.locator(".team-member h3")).toHaveText(["Alice", "Johnny", "Tanzim"]);
+  await expect(page.locator(".team-member h3")).toHaveText(["Alice", "Johnny"]);
+  await expect(page.locator("main")).not.toContainText("Tanzim");
+  await expect(page.locator('img[src="/team/tanzim.png"]')).toHaveCount(0);
   const johnny = page.locator("[aria-labelledby='johnny-name']");
   await expect(johnny).toContainText("He also supported a $12m funding round");
   await expect(johnny).not.toContainText(/London School of Economics|LSE/);
