@@ -230,6 +230,56 @@ test("founder email links fade on hover and remain accessible", async ({ page })
   await expect(johnny.locator("span")).toHaveCSS("transition-duration", "0s");
 });
 
+test("portrait hover fades only its bio and email without shifting the layout", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const team = page.locator("#team");
+  await team.scrollIntoViewIfNeeded();
+  for (const name of ["alice", "johnny"]) {
+    const member = page.locator(`[aria-labelledby='${name}-name']`);
+    const bio = member.locator(".team-bio");
+    const email = member.locator(".team-email");
+    const otherBio = page.locator(`[aria-labelledby='${name === "alice" ? "johnny" : "alice"}-name'] .team-bio`);
+    const layout = () => member.evaluate((element) => {
+      const parent = element.getBoundingClientRect();
+      return [...element.children].map((child) => {
+        const box = child.getBoundingClientRect();
+        return { top: box.top - parent.top, width: box.width, height: box.height };
+      });
+    });
+    await expect(member).toHaveCSS("transform", "none");
+    const before = await layout();
+    const teamHeight = await team.evaluate((element) => element.offsetHeight);
+    await member.locator(".team-portrait").hover();
+    await expect(bio).toHaveCSS("opacity", "0");
+    await expect(email).toHaveCSS("opacity", "0");
+    await expect(otherBio).toHaveCSS("opacity", "1");
+    await expect(member.locator("h3")).toHaveCSS("opacity", "1");
+    expect(await layout()).toEqual(before);
+    expect(await team.evaluate((element) => element.offsetHeight)).toBe(teamHeight);
+    await page.mouse.move(0, 0);
+    await expect(bio).toHaveCSS("opacity", "1");
+    await expect(email).toHaveCSS("opacity", "1");
+    expect(await layout()).toEqual(before);
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator("[aria-labelledby='alice-name'] .team-bio")).toHaveCSS("transition-duration", "0s");
+});
+
+test("touch users keep founder text visible after tapping a portrait", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  try {
+    const page = await context.newPage();
+    await page.goto("/");
+    const member = page.locator("[aria-labelledby='alice-name']");
+    await member.locator(".team-portrait").tap();
+    await expect(member.locator(".team-bio")).toHaveCSS("opacity", "1");
+    await expect(member.locator(".team-email")).toHaveCSS("opacity", "1");
+  } finally {
+    await context.close();
+  }
+});
+
 test("API rejects malformed input and never exposes saved email addresses", async ({
   request,
 }) => {

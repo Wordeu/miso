@@ -862,7 +862,17 @@ h1 .accent,
   opacity: 1;
   transition: opacity 0.4s ease;
 }
+.team-bio,
+.team-email {
+  opacity: 1;
+  /* Opacity alone preserves the full text area throughout the fade. */
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
 @media (hover: hover) and (pointer: fine) {
+  .team-portrait:hover ~ .team-bio,
+  .team-portrait:hover ~ .team-email:not(:focus-visible) {
+    opacity: 0;
+  }
   .team-email:hover:not(:focus-visible) span {
     opacity: 0;
   }
