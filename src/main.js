@@ -340,6 +340,7 @@ for (const link of navLinks)
 
 const signup = document.querySelector(".launch-signup");
 for (const portrait of document.querySelectorAll(".team-portrait")) {
+  const member = portrait.closest(".team-member");
   let blurTimer;
   const revealPortrait = () => {
     clearTimeout(blurTimer);
@@ -349,8 +350,13 @@ for (const portrait of document.querySelectorAll(".team-portrait")) {
     blurTimer = setTimeout(() => portrait.classList.remove("is-clear"), 4000 + revealDuration);
   };
   portrait.addEventListener("pointerenter", (event) => {
-    if (event.pointerType !== "touch") revealPortrait();
+    if (event.pointerType !== "touch") {
+      member.classList.add("is-reading");
+      revealPortrait();
+    }
   });
+  // Keep the revealed copy reachable when moving from the photo to Email.
+  member.addEventListener("pointerleave", () => member.classList.remove("is-reading"));
   portrait.addEventListener("focus", () => {
     if (portrait.matches(":focus-visible")) revealPortrait();
   });

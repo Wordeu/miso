@@ -215,6 +215,8 @@ test("founder email links fade on hover and remain accessible", async ({ page })
     const link = page.getByRole("link", { name: `Email ${name}`, exact: true });
     await expect(link).toHaveAttribute("href", `mailto:${email}`);
     await expect(link).toHaveText("Email");
+    await page.locator(`[aria-labelledby='${name.toLowerCase()}-name'] .team-portrait`).hover();
+    await expect(link).toHaveCSS("opacity", "1");
     await expect(link.locator("span")).toHaveCSS("opacity", "1");
     await link.hover();
     await expect(link.locator("span")).toHaveCSS("opacity", "0");
@@ -230,7 +232,7 @@ test("founder email links fade on hover and remain accessible", async ({ page })
   await expect(johnny.locator("span")).toHaveCSS("transition-duration", "0s");
 });
 
-test("portrait hover fades only its bio and email without shifting the layout", async ({ page }) => {
+test("portrait hover reveals only its bio and email without shifting the layout", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
   const team = page.locator("#team");
@@ -250,28 +252,34 @@ test("portrait hover fades only its bio and email without shifting the layout", 
     await expect(member).toHaveCSS("transform", "none");
     const before = await layout();
     const teamHeight = await team.evaluate((element) => element.offsetHeight);
-    await member.locator(".team-portrait").hover();
     await expect(bio).toHaveCSS("opacity", "0");
     await expect(email).toHaveCSS("opacity", "0");
-    await expect(otherBio).toHaveCSS("opacity", "1");
+    await member.locator(".team-portrait").hover();
+    await expect(bio).toHaveCSS("opacity", "1");
+    await expect(email).toHaveCSS("opacity", "1");
+    await expect(otherBio).toHaveCSS("opacity", "0");
     await expect(member.locator("h3")).toHaveCSS("opacity", "1");
     expect(await layout()).toEqual(before);
     expect(await team.evaluate((element) => element.offsetHeight)).toBe(teamHeight);
-    await page.mouse.move(0, 0);
+    await email.hover();
     await expect(bio).toHaveCSS("opacity", "1");
     await expect(email).toHaveCSS("opacity", "1");
+    await page.mouse.move(0, 0);
+    await expect(bio).toHaveCSS("opacity", "0");
+    await expect(email).toHaveCSS("opacity", "0");
     expect(await layout()).toEqual(before);
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("[aria-labelledby='alice-name'] .team-bio")).toHaveCSS("transition-duration", "0s");
 });
 
-test("touch users keep founder text visible after tapping a portrait", async ({ browser }) => {
+test("touch users reveal founder text by tapping a portrait", async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   try {
     const page = await context.newPage();
     await page.goto("/");
     const member = page.locator("[aria-labelledby='alice-name']");
+    await expect(member.locator(".team-bio")).toHaveCSS("opacity", "0");
     await member.locator(".team-portrait").tap();
     await expect(member.locator(".team-bio")).toHaveCSS("opacity", "1");
     await expect(member.locator(".team-email")).toHaveCSS("opacity", "1");

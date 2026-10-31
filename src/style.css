@@ -864,17 +864,31 @@ h1 .accent,
 }
 .team-bio,
 .team-email {
-  opacity: 1;
+  opacity: 0;
+  pointer-events: none;
   /* Opacity alone preserves the full text area throughout the fade. */
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.team-member:has(:focus-visible) .team-bio,
+.team-member:has(:focus-visible) .team-email {
+  opacity: 1;
+  pointer-events: auto;
+}
 @media (hover: hover) and (pointer: fine) {
-  .team-portrait:hover ~ .team-bio,
-  .team-portrait:hover ~ .team-email:not(:focus-visible) {
-    opacity: 0;
+  .team-member.is-reading .team-bio,
+  .team-member.is-reading .team-email {
+    opacity: 1;
+    pointer-events: auto;
   }
   .team-email:hover:not(:focus-visible) span {
     opacity: 0;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .team-portrait.is-clear ~ .team-bio,
+  .team-portrait.is-clear ~ .team-email {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 .footer {
