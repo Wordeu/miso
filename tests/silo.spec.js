@@ -209,6 +209,27 @@ test("page explains the developing local network and shows the two founders", as
   await expect(page.locator("main")).not.toContainText(";");
 });
 
+test("founder email links fade on hover and remain accessible", async ({ page }) => {
+  await page.goto("/");
+  for (const [name, email] of [["Alice", "alice@orlaintelligence.com"], ["Johnny", "johnny@orlaintelligence.com"]]) {
+    const link = page.getByRole("link", { name: `Email ${name}`, exact: true });
+    await expect(link).toHaveAttribute("href", `mailto:${email}`);
+    await expect(link).toHaveText("Email");
+    await expect(link.locator("span")).toHaveCSS("opacity", "1");
+    await link.hover();
+    await expect(link.locator("span")).toHaveCSS("opacity", "0");
+    await expect(link).toBeVisible();
+    await page.mouse.move(0, 0);
+    await expect(link.locator("span")).toHaveCSS("opacity", "1");
+  }
+  const johnny = page.getByRole("link", { name: "Email Johnny", exact: true });
+  await johnny.focus();
+  await expect(johnny).toBeFocused();
+  await expect(johnny.locator("span")).toHaveCSS("opacity", "1");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(johnny.locator("span")).toHaveCSS("transition-duration", "0s");
+});
+
 test("API rejects malformed input and never exposes saved email addresses", async ({
   request,
 }) => {

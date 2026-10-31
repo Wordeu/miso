@@ -846,6 +846,27 @@ h1 .accent,
 .team-bio p + p {
   margin-top: 10px;
 }
+.team-email {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin-top: 12px;
+  padding: 10px 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.team-email span {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .team-email:hover:not(:focus-visible) span {
+    opacity: 0;
+  }
+}
 .footer {
   padding-top: 36px;
   border-top: 1px solid var(--line);
